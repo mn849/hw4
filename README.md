@@ -8,7 +8,14 @@ Pre-assignment workspace setup is complete. Implementation will proceed one prob
 
 ## Local data
 
-The assignment data pack is stored under `data/` locally. The database and product images are excluded from Git by `.gitignore`.
+The assignment data pack is excluded from Git by `.gitignore`. After downloading it, place the files at these exact paths:
+
+```text
+data/campus_customs.db
+data/products/<product-image-files>.jpg
+```
+
+The backend reads the SQLite database and image directory from those paths.
 
 ## Planned layout
 
@@ -18,22 +25,39 @@ The assignment data pack is stored under `data/` locally. The database and produ
 - `output/` — harness, design, usability, audit, and testing artifacts
 - `AI_prompts.md` — running prompt log
 
-## Run commands
+## Run the application
 
-Start the backend from `backend/`:
+After placing the data pack, optionally configure live model access from the project root:
 
 ```bash
+cp .env.example .env
+# edit .env and set PORTKEY_API_KEY
+```
+
+Start the backend in one terminal:
+
+```bash
+cd backend
+python -m pip install -r ../requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-In another terminal, start the frontend from `frontend/`:
+In a second terminal, start the frontend:
 
 ```bash
+cd frontend
 npm install
 npm run dev
 ```
 
-The frontend expects the backend at `http://localhost:8000` by default. Set `VITE_API_BASE` if the backend runs elsewhere.
+Open the Vite URL shown in the terminal, normally `http://localhost:5173`. The frontend expects FastAPI at `http://localhost:8000` by default; set `VITE_API_BASE` before starting Vite if the backend runs elsewhere. Check `http://localhost:8000/health` to confirm the backend is running.
+
+To verify the frontend production build:
+
+```bash
+cd frontend
+npm run build
+```
 
 The requested agent model is configured as `openai:gpt-6-astra` through `PYDANTICAI_MODEL`. A local no-key run uses the PydanticAI test model/fallback so the server can still start; provide the required model credentials to make live model calls.
 
